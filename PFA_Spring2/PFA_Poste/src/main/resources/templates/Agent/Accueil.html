@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clients</title>
+    <!-- Link vers Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Ajoutez ici votre propre CSS personnalisé si nécessaire */
+    </style>
+</head>
+<body>
+<div th:replace="Agent/navbar"></div>
+<br><br>
+<h2 class="mb-4" th:each="p : ${client}">
+    <span> Bonjour Agent </span>
+    <span th:text="${p.nom}"></span>
+</h2>
+
+<div class="container mt-5">
+
+    <h2 class="mb-4">Effectuez transaction </h2>
+    <form action="/transaction" method="post">
+        <div class="mb-3">
+            <label for="typeOperation" class="form-label">Type d'opération :</label>
+            <select class="form-select" id="typeOperation" name="typeOperation" required>
+                <option value="" selected hidden>Sélectionnez une transaction</option>
+                <option value="virement">Virement</option>
+                <option value="retrait">Retrait</option>
+                <option value="versement">Versement</option>
+            </select>
+
+
+        </div>
+
+        <div class="mb-3">
+            <label for="num" class="form-label">Numéro de compte :</label>
+            <input type="number" class="form-control" id="num" name="num" placeholder="Entrez le Numéro de Compte" required>
+        </div>
+        <div class="mb-3">
+            <label for="sld" class="form-label">Solde :</label>
+            <input type="number" class="form-control" id="sld" name="sld" placeholder="Entrez le Solde" required min="20">
+        </div>
+        <div class="mb-3" id="beneficiaryAccount" style="display:none;">
+            <label for="num2" class="form-label">Numéro de compte bénéficiaire :</label>
+            <input type="number" class="form-control" id="num2" name="num2" value=0 placeholder="Entrez le Numéro de Compte">
+        </div>
+        <button type="submit" class="btn btn-primary">Apply</button>
+        <br><br>
+        <div th:if="${errorMessage1}" id="errorMessage1" class="alert alert-danger mt-3" role="alert">
+            <p th:text="${errorMessage1}"></p>
+        </div>
+        <div th:if="${errorMessage2}" id="errorMessage2" class="alert alert-danger mt-3" role="alert">
+            <p th:text="${errorMessage2}"></p>
+        </div>
+        <div th:if="${errorMessage3}" id="errorMessage3" class="alert alert-danger mt-3" role="alert">
+            <p th:text="${errorMessage3}"></p>
+        </div>
+        <div th:if="${confirmationMessage}" id="confirmationMessage" class="alert alert-success" role="alert">
+            <p th:text="${confirmationMessage}"></p>
+        </div>
+    </form>
+    <br><br>
+</div>
+
+<!-- Scripts Bootstrap et jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    $(document).ready(function(){
+        $('#typeOperation').change(function(){
+            var selectedOption = $(this).children("option:selected").val();
+            if(selectedOption === 'virement'){
+                $('#beneficiaryAccount').show();
+            } else {
+                $('#beneficiaryAccount').hide();
+            }
+        });
+    });
+</script>
+<style>
+    @keyframes fadeOut {
+        from { opacity: 1; }
+        to { opacity: 0; }
+    }
+
+    #confirmationMessage,
+    #errorMessage1,
+    #errorMessage2,
+    #errorMessage3
+    {
+        animation: fadeOut 17s ease forwards;
+    }
+</style>
+</body>
+</html>

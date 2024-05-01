@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recherche de Compte</title>
+  <!-- Link vers Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div th:replace="Agent/navbar"></div>
+
+<div class="container mt-5">
+  <h2 class="mb-4">Recherche de Compte</h2>
+
+  <div class="row">
+    <div class="col-md-6">
+      <form action="/AfficherComptePArCin" method="post" class="mb-3">
+        <div class="input-group">
+          <input type="number" class="form-control" id="cin" name="cin" placeholder="Cherchez par CIN" required>
+          <button type="submit" class="btn btn-primary">Rechercher</button>
+        </div>
+        <br>
+        <div th:if="${errorMessage}" id="errorMessage" class="alert alert-danger mt-3" role="alert">
+          <p th:text="${errorMessage}"></p>
+        </div>
+      </form>
+    </div>
+    <div class="col-md-6">
+      <form action="/AfficherComptePArnum" method="post" class="mb-3">
+        <div class="input-group">
+          <input type="number" class="form-control" id="num" name="num" placeholder="Cherchez par numéro de Compte" required>
+          <button type="submit" class="btn btn-primary">Rechercher</button>
+        </div>
+        <br>
+        <div th:if="${errorMessage2}" id="errorMessage2" class="alert alert-danger mt-3" role="alert">
+          <p th:text="${errorMessage2}"></p>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div th:if="${comptes != null}">
+
+  <div class="container mt-5">
+
+
+    <h2 class="mb-4">Liste des Comptes Clients</h2>
+    <div class="table-responsive">
+      <table class="table table-striped table-hover">
+        <thead class="table-dark">
+        <tr>
+          <th>#</th>
+          <th>Numéro de Compte</th>
+          <th>Solde</th>
+          <th>ID Client</th>
+          <th>Nom</th>
+          <th>Prénom</th>
+          <th>CIN</th>
+          <th>Téléphone</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="p, row : ${comptes}">
+          <td th:text="${row.index + 1}"></td>
+
+          <td th:text="${p.num}"></td>
+          <td th:text="${p.sld} + ' TND'"></td>
+          <td th:text="${p.client.getId()}"></td>
+          <td th:text="${p.client.getNom()}"></td>
+          <td th:text="${p.client.getPrenom()}"></td>
+          <td th:text="${p.client.getCin()}"></td>
+          <td th:text="${p.client.getTel()}"></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+</div>
+<!-- Scripts Bootstrap et jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<style>
+  /* Animation de disparition */
+  @keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+  }
+
+  /* Appliquer l'animation à l'élément */
+  #errorMessage,
+  #errorMessage2{
+    animation: fadeOut 10s ease forwards;
+  }
+</style>
+</body>
+</html>
