@@ -3,7 +3,9 @@ package tn.pi.Web;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import tn.pi.GlobalVariables;
 import tn.pi.entites.Client;
 import tn.pi.repository.ClientRepository;
@@ -15,17 +17,17 @@ public class authController {
     private ClientRepository clientRepository;
 
     @GetMapping(path = "/")
-    public String auth(){
-        return  login();
+    public String auth() {
+        return "redirect:/login";
     }
+
     @GetMapping(path = "/login")
-    public String login(){
-
-
+    public String login(Model model, @RequestParam(value = "error", required = false) String error) {
+        if (error != null) {
+            model.addAttribute("errorMessage", "Email ou mot de passe incorrect. Veuillez réessayer.");
+        }
         return "auth/login";
     }
-
-
     @PostMapping(path = "/login")
     public String auth(@RequestParam("username") String username, @RequestParam("password") String password,Model model){
 
@@ -46,8 +48,7 @@ public class authController {
     }
 
     @GetMapping(path = "/About2")
-     public String About(){
-
+    public String about() {
         return "auth/About2";
     }
 }

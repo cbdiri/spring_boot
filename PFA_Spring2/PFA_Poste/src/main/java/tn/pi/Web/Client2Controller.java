@@ -2,6 +2,7 @@ package tn.pi.Web;
 
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import tn.pi.GlobalVariables;
+import tn.pi.PasswordEncodingRunner;
 import tn.pi.entites.Client;
 import tn.pi.entites.Compte;
 import tn.pi.entites.Extrait;
@@ -30,7 +32,10 @@ public class Client2Controller {
     @Autowired
     private ExtraitRepository extraitRepository;
 
-    @GetMapping(path = "/Index")
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @GetMapping(path = "/Client/Index")
     public String Accueil(Model model){
 
         Long currentCin = GlobalVariables.getUser_id();
@@ -42,7 +47,7 @@ public class Client2Controller {
     }
 
 
-    @GetMapping(path = "/Profile2")
+    @GetMapping(path = "/Client/Profile2")
     public String Profile(Model model){
         Long currentCin = GlobalVariables.getUser_id();
         System.out.println("l'id  de user est : " + currentCin);
@@ -52,16 +57,17 @@ public class Client2Controller {
 
         return "Client/Profile2";
     }
-    @PostMapping(path = "/updateProfile2")
+    @PostMapping(path = "/Client/updateProfile2")
     public String updateProfile(@ModelAttribute("client") Client client,Model model) {
 
+        if (!client.getPassword().startsWith("$2a$")) {  client.setPassword(passwordEncoder.encode(client.getPassword()));}
         clientRepository.save(client);
         model.addAttribute("confirmationMessage", "Profil mis à jour avec succès !");
         return Profile(model);
     }
 
 
-    @GetMapping("/Consulter")
+    @GetMapping("/Client/Consulter")
     public String Consulter(Model model) {
 
 
@@ -81,7 +87,7 @@ public class Client2Controller {
     }
 
 
-    @GetMapping("/virement")
+    @GetMapping("/Client/virement")
     public String virement(Model model) {
 
 
@@ -103,7 +109,7 @@ public class Client2Controller {
 
 
 
-    @PostMapping("/virement")
+    @PostMapping("/Client/virement")
     public String virement2(@RequestParam("numCompte") long num,@RequestParam("num2") long num2,@RequestParam("sld") double sld,Model model) {
 
 
@@ -151,7 +157,7 @@ public class Client2Controller {
         return "Client/virement";
     }
 
-    @GetMapping(path = "/Extrait2")
+    @GetMapping(path = "/Client/Extrait2")
     public String Extrait2(Model model){
 
         Client user = clientRepository.findById(GlobalVariables.getUser_id()).orElse(null);
@@ -168,11 +174,12 @@ public class Client2Controller {
         return "Client/Extrait2";
     }
 
-    @PostMapping("/Extrait2")
+    @PostMapping("/Client/Extrait2")
     public String Extrait2(@RequestParam("numCompte") long num, Model model) {
 
+        System.out.println(num);
         Client user = clientRepository.findById(GlobalVariables.getUser_id()).orElse(null);
-
+        System.out.println(user);
 
         if (user != null) {
             model.addAttribute("client", user);
@@ -201,13 +208,13 @@ public class Client2Controller {
 
 
 
-    @GetMapping(path = "/About3")
+    @GetMapping(path = "/Client/About3")
     public String About(){
         System.out.println(GlobalVariables.getUser_id());
         return "Client/About3";
     }
 
-    @GetMapping(path = "/Logout2")
+    @GetMapping(path = "/Client/Logout2")
     public String Logout(){
 
         return "redirect:/login";

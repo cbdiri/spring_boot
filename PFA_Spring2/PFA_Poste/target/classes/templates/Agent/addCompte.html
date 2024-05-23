@@ -17,7 +17,7 @@
 <div class="container mt-5">
 
   <h2 class="mb-4">Ajouter Compte Client</h2>
-  <form action="/AddCompte" method="post">
+  <form th:action="@{/Agent/AddCompte}" method="post">
     <div class="mb-3">
       <label for="cin" class="form-label">CIN :</label>
       <input type="number" class="form-control" id="cin" name="cin" placeholder="Entrez le CIN" required>

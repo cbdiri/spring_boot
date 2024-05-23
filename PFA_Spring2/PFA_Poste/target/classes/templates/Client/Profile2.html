@@ -12,7 +12,7 @@
 
 <div class="container mt-5">
   <h2 class="mb-4">Mon Profile</h2>
-  <form action="/updateProfile2" method="post" th:object="${client}">
+  <form th:action="@{/Client/updateProfile2}" method="post" th:object="${client}">
     <input type="hidden" th:field="*{id}" />
     <input type="hidden" name="agent" th:value="${client.agent}" />
     <input type="hidden" name="valide" th:value="${client.valide}" />

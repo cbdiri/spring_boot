@@ -1,6 +1,7 @@
 package tn.pi.Web;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,37 +18,39 @@ public class ClientController {
 
     @Autowired
     private ClientRepository clientRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
 
-
-    @GetMapping(path = "/Clients")
+    @GetMapping(path = "/Agent/Clients")
     public String index(Model model){
         List<Client> clientList = clientRepository.findAll();
         model.addAttribute("clients",clientList);
         return "Agent/clients";
     }
 
-    @GetMapping("/ajouterClient")
+    @GetMapping("/Agent/ajouterClient")
     public String afficherFormulaireAjoutClient(Model model) {
         return "Agent/addClient";
     }
 
-    @PostMapping("/ajouterClient")
+    @PostMapping("/Agent/ajouterClient")
     public String ajouterClient(@ModelAttribute Client client,Model model) {
 
+        if (!client.getPassword().startsWith("$2a$")) {  client.setPassword(passwordEncoder.encode(client.getPassword()));}
         clientRepository.save(client);
 
         model.addAttribute("confirmationMessage", "Client Ajouter avec succès !");
         return afficherFormulaireAjoutClient(model);
     }
 
-    @GetMapping("/EditClient")
+    @GetMapping("/Agent/EditClient")
     public String EditClient(Model model) {
 
         return "Agent/EditClient";
     }
 
-    @PostMapping("/EditClient")
+    @PostMapping("/Agent/EditClient")
     public String EditClient2(@RequestParam("cin") int cin,Model model)  {
 
         System.out.println(cin);
@@ -65,8 +68,9 @@ public class ClientController {
 
     }
 
-    @PostMapping(path = "/updateClient")
+    @PostMapping(path = "/Agent/updateClient")
     public String updateClient(@ModelAttribute("client") Client client,Model model) {
+        if (!client.getPassword().startsWith("$2a$")) {  client.setPassword(passwordEncoder.encode(client.getPassword()));}
 
         clientRepository.save(client);
         model.addAttribute("confirmationMessage", "Profil mis à jour avec succès !");

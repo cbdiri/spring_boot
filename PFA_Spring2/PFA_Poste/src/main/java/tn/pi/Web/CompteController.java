@@ -29,7 +29,7 @@ public class CompteController {
     private ExtraitRepository extraitRepository;
 
 
-     @GetMapping("/Compte")
+     @GetMapping("/Agent/Compte")
      public String Compte(Model model) {
           List<Compte> comptetList = compteRepository.findAll();
           model.addAttribute("comptes",comptetList);
@@ -37,14 +37,14 @@ public class CompteController {
           return "Agent/Compte";
      }
 
-    @GetMapping("/AddCompte")
+    @GetMapping("/Agent/AddCompte")
     public String Compte2(Model model) {
 
 
         return "Agent/addCompte";
     }
 
-     @PostMapping("/AddCompte")
+     @PostMapping("/Agent/AddCompte")
      public String AddCompte(@RequestParam("cin") int cin, @RequestParam("sld") double sld, Model model)  {
 
           System.out.println(cin);
@@ -70,14 +70,14 @@ public class CompteController {
      }
 
 
-    @GetMapping("/AfficherCompte")
+    @GetMapping("/Agent/AfficherCompte")
     public String AfficherCompte(Model model) {
 
 
         return "Agent/AfficherCompte";
     }
 
-    @PostMapping("/AfficherComptePArCin")
+    @PostMapping("/Agent/AfficherComptePArCin")
     public String AfficherCompte2(@RequestParam("cin") int cin, Model model) {
 
         Client user = clientRepository.findByCin(cin);
@@ -97,7 +97,7 @@ public class CompteController {
     }
 
 
-    @PostMapping("/AfficherComptePArnum")
+    @PostMapping("/Agent/AfficherComptePArnum")
     public String AfficherCompte3(@RequestParam("num") long num, Model model) {
 
         List<Compte> compteList = compteRepository.findByNum(num);
@@ -116,14 +116,14 @@ public class CompteController {
     }
 
 
-    @GetMapping("/Extrait")
+    @GetMapping("/Agent/Extrait")
     public String Extrait(Model model) {
 
 
 
         return "Agent/Extrait";
     }
-    @PostMapping("/Extrait")
+    @PostMapping("/Agent/Extrait")
     public String Extrait(@RequestParam("num") long num, Model model) {
 
         List<Compte> compteList = compteRepository.findByNum(num);

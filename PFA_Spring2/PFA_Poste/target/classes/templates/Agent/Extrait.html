@@ -18,7 +18,7 @@
 
   <div class="row">
     <div class="col-md-6">
-      <form action="/Extrait" method="post" class="mb-3">
+      <form th:action="@{/Agent/Extrait}" method="post" class="mb-3">
         <div class="input-group">
           <input type="number" class="form-control" id="num" name="num" placeholder="Inserez Numéro du Compte" required>
           <button type="submit" class="btn btn-primary">Rechercher</button>

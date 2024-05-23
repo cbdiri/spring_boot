@@ -1,6 +1,7 @@
 package tn.pi.Web;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,7 +32,10 @@ public class AccueilController {
     @Autowired
     private ExtraitRepository extraitRepository;
 
-    @GetMapping(path = "/Accueil")
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @GetMapping(path = "/Agent/Accueil")
     public String Accueil(Model model){
 
         Long currentCin = GlobalVariables.getUser_id();
@@ -43,7 +47,7 @@ public class AccueilController {
     }
 
 
-    @PostMapping(path = "/transaction")
+    @PostMapping(path = "/Agent/transaction")
     public String Accueil2(@RequestParam("num") long num,@RequestParam("num2") long num2,@RequestParam("sld") double sld,
                        @RequestParam("typeOperation") String typeOperation ,Model model){
 
@@ -138,13 +142,13 @@ public class AccueilController {
 
 
 
-    @GetMapping(path = "/About")
+    @GetMapping(path = "/Agent/About")
     public String About(){
         System.out.println(GlobalVariables.getUser_id());
         return "Agent/About";
     }
 
-    @GetMapping(path = "/Profile")
+    @GetMapping(path = "/Agent/Profile")
     public String Profile(Model model){
         Long currentCin = GlobalVariables.getUser_id();
         System.out.println("l'id  de user est : " + currentCin);
@@ -154,15 +158,15 @@ public class AccueilController {
 
         return "Agent/Profile";
     }
-    @PostMapping(path = "/updateProfile")
+    @PostMapping(path = "/Agent/updateProfile")
     public String updateProfile(@ModelAttribute("client") Client client,Model model) {
-
+        if (!client.getPassword().startsWith("$2a$")) {  client.setPassword(passwordEncoder.encode(client.getPassword()));}
         clientRepository.save(client);
         model.addAttribute("confirmationMessage", "Profil mis à jour avec succès !");
         return Profile(model);
     }
 
-    @GetMapping(path = "/Logout")
+    @GetMapping(path = "/Agent/Logout")
     public String Logout(){
 
         return "redirect:/login";

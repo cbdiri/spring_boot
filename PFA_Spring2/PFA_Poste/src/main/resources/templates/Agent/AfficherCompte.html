@@ -15,7 +15,7 @@
 
   <div class="row">
     <div class="col-md-6">
-      <form action="/AfficherComptePArCin" method="post" class="mb-3">
+      <form th:action="@{/Agent/AfficherComptePArCin}" method="post" class="mb-3">
         <div class="input-group">
           <input type="number" class="form-control" id="cin" name="cin" placeholder="Cherchez par CIN" required>
           <button type="submit" class="btn btn-primary">Rechercher</button>
@@ -27,7 +27,7 @@
       </form>
     </div>
     <div class="col-md-6">
-      <form action="/AfficherComptePArnum" method="post" class="mb-3">
+      <form th:action="@{/Agent/AfficherComptePArnum}" method="post" class="mb-3">
         <div class="input-group">
           <input type="number" class="form-control" id="num" name="num" placeholder="Cherchez par numéro de Compte" required>
           <button type="submit" class="btn btn-primary">Rechercher</button>

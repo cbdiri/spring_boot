@@ -12,7 +12,7 @@
 
 <div class="container mt-5">
   <h2 class="mb-4">Mon Profile</h2>
-  <form action="/updateProfile" method="post" th:object="${client}">
+  <form th:action="@{/Agent/updateProfile}" method="post" th:object="${client}">
     <input type="hidden" th:field="*{id}" />
     <div class="table-responsive">
       <table class="table table-striped table-hover">
